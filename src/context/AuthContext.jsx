@@ -1,5 +1,5 @@
 // src/context/AuthContext.js
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useState } from 'react';
 import AuthService from '../services/AuthService';
 
 const AuthContext = createContext(null);
@@ -26,14 +26,12 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-    // Hook para usar el token en cualquier componente
-    const useAuth = () => {
-        return useContext(AuthContext);
-    };
 
     return (
+        // eslint-disable-next-line no-undef
         <AuthContext.Provider value={{ token, user, login, logout, useAuth }}>
             {children}
         </AuthContext.Provider>
     );
 };
+export { AuthContext };

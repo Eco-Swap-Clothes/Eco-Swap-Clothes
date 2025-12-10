@@ -1,83 +1,117 @@
-// src/pages/RegisterPage.jsx (NUEVO ARCHIVO)
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthService from '../services/AuthService'; 
+// src/pages/RegisterPage.jsx
 
-const RegisterPage = () => {
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import AuthService from '../services/AuthService'; 
+// Importa cualquier componente de UI que uses (p. ej., Footer, Navbar)
+
+function RegisterPage() {
+    // --- ESTADO LOCAL ---
     const [nombre, setNombre] = useState('');
     const [mail, setMail] = useState('');
     const [contrasena, setContrasena] = useState('');
-    const [message, setMessage] = useState('');
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    
+    // Hook para la navegación
     const navigate = useNavigate();
 
+    // --- MANEJADOR DE ENVÍO ---
     const handleRegister = async (e) => {
         e.preventDefault();
-        setMessage('');
+        setError(null);
+        setLoading(true);
 
+        // Simple validación básica (adicional a la del DTO del backend)
         if (!nombre || !mail || !contrasena) {
-            setMessage('Por favor, rellena todos los campos.');
+            setError('Todos los campos son obligatorios.');
+            setLoading(false);
             return;
         }
 
         try {
-            // Llama al servicio que conecta con POST /api/auth/register
-            setMessage('Registro exitoso. ¡Inicia sesión para continuar!');
+            // 1. Llama al servicio de registro (ya corregido en AuthService.js)
+            await AuthService.register(nombre, mail, contrasena);
             
-            // Navegar a la página de login después de un registro exitoso (o al perfil si hay login automático)
+            // [CORRECCIÓN CLAVE AQUÍ]
+            // El registro fue exitoso. Como el backend no devuelve el token,
+            // redirigimos al usuario a la página de login para que inicie sesión.
+            alert('¡Registro exitoso! Por favor, inicia sesión con tus nuevas credenciales.');
             navigate('/login'); 
-            
-        } catch (error) {
-            console.error('Error durante el registro:', error);
-            // El backend devuelve 400 Bad Request, mostramos un error genérico
-            if (error.response && error.response.status === 400) {
-                 setMessage('Error 400 Bad Request: Verifica los datos ingresados. Puede que el email ya esté en uso o la contraseña sea inválida.');
-            } else {
-                 setMessage('Error al intentar registrar. Revisa la conexión del servidor.');
-            }
+
+        } catch (err) {
+            // Manejo de errores de la API (por ejemplo, correo ya existe - 409 CONFLICT)
+            // Tu GlobalExceptionHandler.java envía el error en err.response.data.message
+            const errorMessage = err.response 
+                ? err.response.data.message 
+                : 'Error de conexión con el servidor.';
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
+    // --- RENDERIZADO DEL COMPONENTE ---
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h2>Registrar Nueva Cuenta</h2>
-            <form onSubmit={handleRegister}>
-                <div>
-                    <label>Nombre:</label>
+        <div className="register-container">
+            <h1>Regístrate en EcoSwap</h1>
+            
+            <form onSubmit={handleRegister} className="register-form">
+                
+                {/* Mensaje de Error */}
+                {error && <div className="alert alert-danger">{error}</div>}
+
+                {/* Campo Nombre */}
+                <div className="form-group">
+                    <label htmlFor="nombre">Nombre</label>
                     <input
                         type="text"
+                        id="nombre"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         required
-                        style={{ width: '100%', padding: '8px', margin: '5px 0' }}
+                        className="form-control"
                     />
                 </div>
-                <div>
-                    <label>Email:</label>
+
+                {/* Campo Email */}
+                <div className="form-group">
+                    <label htmlFor="mail">Correo Electrónico</label>
                     <input
                         type="email"
+                        id="mail"
                         value={mail}
                         onChange={(e) => setMail(e.target.value)}
                         required
-                        style={{ width: '100%', padding: '8px', margin: '5px 0' }}
+                        className="form-control"
                     />
                 </div>
-                <div>
-                    <label>Contraseña:</label>
+
+                {/* Campo Contraseña */}
+                <div className="form-group">
+                    <label htmlFor="contrasena">Contraseña</label>
                     <input
                         type="password"
+                        id="contrasena"
                         value={contrasena}
                         onChange={(e) => setContrasena(e.target.value)}
                         required
-                        style={{ width: '100%', padding: '8px', margin: '5px 0' }}
+                        className="form-control"
+                        minLength={6} // Coincide con la validación de UsuarioRegistroDTO
                     />
                 </div>
-                <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#38a169', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '15px' }}>
-                    Registrarse
+
+                {/* Botón de Envío */}
+                <button type="submit" disabled={loading} className="btn-primary">
+                    {loading ? 'Registrando...' : 'Crear Cuenta'}
                 </button>
             </form>
-            {message && <p style={{ marginTop: '15px', color: message.startsWith('Error') ? 'red' : 'green' }}>{message}</p>}
+
+            <p className="login-link">
+                ¿Ya tienes una cuenta? <Link to="/login">Inicia Sesión</Link>
+            </p>
         </div>
     );
-};
+}
 
 export default RegisterPage;

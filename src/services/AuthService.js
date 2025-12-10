@@ -1,4 +1,4 @@
-// src/services/AuthService.js
+// src/services/AuthService.js (CORREGIDO)
 import axios from 'axios';
 
 // La URL base de tu backend de Spring Boot
@@ -14,10 +14,9 @@ class AuthService {
      * @param {string} nombre
      * @param {string} mail
      * @param {string} contrasena
-     * @returns {Promise<string>} JWT Token
+     * @returns {Promise<Object>} El DTO del usuario creado.
      */
     async register(nombre, mail, contrasena) {
-        // Nota: Asumimos que el backend devuelve el JWT en el cuerpo de la respuesta después del registro.
         const response = await axios.post(API_URL + 'register', {
             nombre,
             mail,
@@ -29,11 +28,10 @@ class AuthService {
             }
         });
         
-        // Guardamos el token y la información del usuario en localStorage al registrarse (login automático)
-        if (response.data.token) {
-            localStorage.setItem('user', JSON.stringify(response.data));
-        }
-        return response.data; // Debería contener el token
+        // El backend devuelve solo el objeto de usuario (sin token).
+        // Se omite la lógica de login automático para coincidir con la implementación del backend.
+        
+        return response.data; 
     }
 
     /**
@@ -52,12 +50,15 @@ class AuthService {
             }
         });
 
-        // Guardamos el token y la información del usuario en localStorage
-        if (response.data) {
-            // response.data debe contener al menos el token.
-            localStorage.setItem('token', response.data); 
+        // [CORRECCIÓN CLAVE]: El backend devuelve { token: "..." }. 
+        // Extraemos solo la cadena del token para guardar en localStorage.
+        const token = response.data.token; 
+
+        // Guardamos el token en localStorage
+        if (token) {
+            localStorage.setItem('token', token); 
         }
-        return response.data; // Devuelve el token directamente
+        return token; // Devuelve el token
     }
 
     /**

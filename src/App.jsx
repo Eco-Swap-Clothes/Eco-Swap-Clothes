@@ -1,7 +1,7 @@
 // src/App.jsx (COMPLETO)
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './context/AuthContext.jsx';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 

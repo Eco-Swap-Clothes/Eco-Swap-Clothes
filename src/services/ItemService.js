@@ -1,69 +1,52 @@
-// src/services/UserService.js (NUEVO)
+// src/services/ItemService.js
 
 import axios from 'axios';
 import AuthService from './AuthService'; 
 
-const API_URL = 'http://localhost:8080/api/users/';
+// URL base para el ItemController
+const API_URL = 'http://localhost:8080/api/items'; 
 
-class UserService {
+class ItemService {
     
+    // Función de utilidad para obtener los headers de autorización
     getAuthHeaders() {
         const token = AuthService.getCurrentToken();
         if (token) {
+            // Devuelve los headers con el token Bearer
             return { Authorization: `Bearer ${token}` };
         }
         return {}; 
     }
 
     /**
-     * Obtiene los datos del usuario autenticado (GET /api/users/me).
+     * Publica un nuevo artículo (POST /api/items).
+     * @param {FormData} formData - Contiene los datos del artículo (título, descripción, imagenPrincipal, etc.).
      */
-    async getCurrentUser() {
+    async createItem(formData) {
         const headers = this.getAuthHeaders();
+        
         if (!headers.Authorization) {
-             throw new Error("No autenticado.");
+            throw new Error("No autenticado. Por favor, inicia sesión.");
         }
         
-        // Asumiendo que el backend tiene el endpoint /api/users/me
-        const response = await axios.get(
-            API_URL + 'me', 
-            { headers } 
+        const response = await axios.post(
+            API_URL, 
+            formData, 
+            { 
+                headers: {
+                    ...headers,
+                } 
+            } 
         );
         return response.data;
     }
     
-    /**
-     * Obtiene los artículos del usuario autenticado.
-     * Asumimos que el backend puede filtrar items por dueño autenticado
-     * O que tiene un endpoint específico (ej. /api/users/me/items)
-     */
-    async getMyPublishedItems() {
-         const headers = this.getAuthHeaders();
-        if (!headers.Authorization) {
-             throw new Error("No autenticado.");
-        }
-        // [Ajuste más probable en backend]: Tu backend puede devolver items
-        // filtrados para el usuario actual si la ruta es /api/items/my
-        // o si es /api/users/me/items
-        
-        // Opción 1 (más limpia): si el backend tiene un endpoint dedicado
-        // const response = await axios.get(API_URL + 'me/items', { headers });
-        
-        // Opción 2 (más compatible con tu ItemController): pedimos items y
-        // el backend deduce el usuario
-        const response = await axios.get(
-            'http://localhost:8080/api/items/', // Ajusta esta URL si tu backend tiene otra para "mis items"
-            { 
-                headers,
-                // Si tu backend usa el filtro de usuario en ItemController, 
-                // podríamos intentar pasar el ID, pero es menos seguro:
-                // params: { userId: 'me' } // Solo si el backend lo acepta
-            }
-        );
-        
-        // Si el backend devuelve un Page:
-        return response.data.content || response.data; 
-    }
+    // Aquí puedes añadir otras funciones como:
+    
+    // async getItems(params) { ... }
+    // async getItemById(itemId) { ... }
+    
 }
 
-export default new UserService();
+// Exportamos una instancia de la clase para usarla directamente.
+export default new ItemService();

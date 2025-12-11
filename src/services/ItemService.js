@@ -1,115 +1,69 @@
-// src/services/ItemService.js (CÓDIGO COMPLETO FINAL)
+// src/services/UserService.js (NUEVO)
 
 import axios from 'axios';
 import AuthService from './AuthService'; 
 
-const API_URL = 'http://localhost:8080/api/items/';
+const API_URL = 'http://localhost:8080/api/users/';
 
-class ItemService {
+class UserService {
     
-    // Función de ayuda para obtener el token y armar los headers
     getAuthHeaders() {
         const token = AuthService.getCurrentToken();
         if (token) {
             return { Authorization: `Bearer ${token}` };
         }
-        // Lanzar un error o manejar la falta de token si se llama a una ruta protegida sin él.
         return {}; 
     }
 
     /**
-     * Crea un nuevo artículo (Ruta protegida - Requiere token).
-     * @param {FormData} formData - Contiene los datos del artículo y el archivo de imagen.
+     * Obtiene los datos del usuario autenticado (GET /api/users/me).
      */
-    async createItem(formData) {
+    async getCurrentUser() {
         const headers = this.getAuthHeaders();
         if (!headers.Authorization) {
-             throw new Error("No autenticado. Inicia sesión para publicar.");
+             throw new Error("No autenticado.");
         }
         
-        const response = await axios.post(
-            API_URL, 
-            formData, 
-            { headers: headers } 
+        // Asumiendo que el backend tiene el endpoint /api/users/me
+        const response = await axios.get(
+            API_URL + 'me', 
+            { headers } 
         );
         return response.data;
     }
-
+    
     /**
-     * Obtiene artículos con paginación y filtros (Ruta pública).
-     * Los filtros (page, size, categoria, fechaDesde) se pasan como parámetros.
+     * Obtiene los artículos del usuario autenticado.
+     * Asumimos que el backend puede filtrar items por dueño autenticado
+     * O que tiene un endpoint específico (ej. /api/users/me/items)
      */
-    async getItems(page = 0, size = 12, categoria = '', fechaDesde = '') {
-        const params = { page, size };
-        if (categoria) params.categoria = categoria;
-        if (fechaDesde) params.fechaDesde = fechaDesde; 
+    async getMyPublishedItems() {
+         const headers = this.getAuthHeaders();
+        if (!headers.Authorization) {
+             throw new Error("No autenticado.");
+        }
+        // [Ajuste más probable en backend]: Tu backend puede devolver items
+        // filtrados para el usuario actual si la ruta es /api/items/my
+        // o si es /api/users/me/items
         
-        const response = await axios.get(API_URL, { params });
-        // Devuelve el objeto Page de Spring (content, totalPages, number, etc.)
-        return response.data; 
-    }
-    
-    /**
-     * Obtiene un artículo por ID.
-     */
-    async getItemById(itemId) {
-        const response = await axios.get(API_URL + itemId);
-        return response.data;
-    }
-    
-    // --- ACCIONES PROTEGIDAS ---
-
-    /**
-     * Reserva un artículo (Ruta protegida - Requiere token).
-     */
-    async reservarItem(itemId) {
-        const headers = this.getAuthHeaders();
-        if (!headers.Authorization) {
-             throw new Error("No autenticado.");
-        }
-        // Llama a POST /api/items/{itemId}/reserve
-        const response = await axios.post(
-            `${API_URL}${itemId}/reserve`, 
-            null, // El cuerpo de la petición va vacío
-            { headers }
+        // Opción 1 (más limpia): si el backend tiene un endpoint dedicado
+        // const response = await axios.get(API_URL + 'me/items', { headers });
+        
+        // Opción 2 (más compatible con tu ItemController): pedimos items y
+        // el backend deduce el usuario
+        const response = await axios.get(
+            'http://localhost:8080/api/items/', // Ajusta esta URL si tu backend tiene otra para "mis items"
+            { 
+                headers,
+                // Si tu backend usa el filtro de usuario en ItemController, 
+                // podríamos intentar pasar el ID, pero es menos seguro:
+                // params: { userId: 'me' } // Solo si el backend lo acepta
+            }
         );
-        return response.data;
+        
+        // Si el backend devuelve un Page:
+        return response.data.content || response.data; 
     }
-
-    /**
-     * Cancela la reserva de un artículo (Ruta protegida - Requiere token).
-     */
-    async cancelarReserva(itemId) {
-        const headers = this.getAuthHeaders();
-        if (!headers.Authorization) {
-             throw new Error("No autenticado.");
-        }
-        // Llama a DELETE /api/items/{itemId}/reserve
-        const response = await axios.delete(
-            `${API_URL}${itemId}/reserve`, 
-            { headers }
-        );
-        return response.data;
-    }
-    
-    /**
-     * Completa el intercambio del artículo (Ruta protegida - Solo el dueño).
-     */
-    async completarIntercambio(itemId) {
-        const headers = this.getAuthHeaders();
-        if (!headers.Authorization) {
-             throw new Error("No autenticado.");
-        }
-        // Llama a POST /api/items/{itemId}/complete
-        const response = await axios.post(
-            `${API_URL}${itemId}/complete`, 
-            null, 
-            { headers }
-        );
-        return response.data;
-    }
-
-    // Nota: Faltarían los métodos para editar y eliminar, que también usarían el token.
 }
 
-export default new ItemService();
+export default new UserService();

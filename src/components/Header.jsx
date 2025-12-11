@@ -14,9 +14,9 @@ const Header = () => {
     };
 
     return (
-        <header style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 50px', backgroundColor: '#e0ffe0', alignItems: 'center' }}>
+        <header style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 50px', backgroundColor: '#2f573c', alignItems: 'center' }}>
             {/* Logo/Título (EcoSwap) */}
-            <Link to="/" style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e7c4f', textDecoration: 'none' }}>
+            <Link to="/" style={{ fontSize: '24px', fontWeight: 'bold', color: '#ffffff', textDecoration: 'none' }}>
                 EcoSwap
             </Link>
 
@@ -28,14 +28,14 @@ const Header = () => {
             {/* Botones de Navegación */}
             <nav>
                 {/* Botón Publicar Ropa */}
-                <Link to="/publish" style={{ marginRight: '15px', padding: '8px 15px', backgroundColor: '#38a169', color: 'white', borderRadius: '4px', textDecoration: 'none' }}>
+                <Link to="/publish" style={{ marginRight: '15px', padding: '8px 15px', backgroundColor: '#89BC01', color: 'white', borderRadius: '4px', textDecoration: 'none' }}>
                     Publicar Ropa
                 </Link>
 
                 {/* Botones de Auth/Perfil */}
                 {token ? (
                     <>
-                        <Link to="/profile" style={{ marginRight: '15px', textDecoration: 'none', color: '#1e7c4f', fontWeight: 'bold' }}>
+                        <Link to="/profile" style={{ marginRight: '15px', textDecoration: 'none', color: '#ffffff', fontWeight: 'bold' }}>
                             Mi Perfil
                         </Link>
                         <button onClick={handleLogout} style={{ padding: '8px 15px', backgroundColor: '#f0f0f0', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>

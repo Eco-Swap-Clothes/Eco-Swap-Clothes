@@ -1,17 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-undef */
- 
+
+
 // src/pages/ExplorePage.jsx (CORREGIDO Y AMPLIADO)
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// Importamos AuthService para obtener el token, necesario si queremos usar 'Intercambiar'
-// Aunque la exploración es pública, lo necesitaríamos para acciones protegidas
 import AuthService from '../services/AuthService'; 
+
+// *** SOLUCIÓN 1: DEFINICIÓN DE LA URL DE LA API ***
+// Definimos la URL base del servidor de la API
+const API_BASE_URL = 'http://localhost:8080/api';
+// Definimos el endpoint completo para obtener ítems
+const ITEMS_ENDPOINT = `${API_BASE_URL}/items`;
+// ----------------------------------------------------
 
 // Asumo que tu ItemCard estará en su propio archivo, pero mantengo la simple implementación aquí
 const SimpleItemCard = ({ item }) => {
-    const BASE_URL = 'http://localhost:8080/uploads/';
+    // Usamos el mismo BASE_URL que la lógica de Java, solo para las imágenes
+    const UPLOADS_BASE_URL = 'http://localhost:8080/uploads/';
     const isAuthenticated = AuthService.getCurrentToken() !== null; 
 
     // Función de ejemplo para manejar la reserva (requeriría una llamada a ItemService)
@@ -29,7 +35,7 @@ const SimpleItemCard = ({ item }) => {
         <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', margin: '10px', backgroundColor: 'white' }}>
             {/* Imagen: Se mantiene la corrección de URL */}
             <img 
-                src={item.imagenPrincipal ? `${BASE_URL}${item.imagenPrincipal}` : '/default-item.png'} 
+                src={item.imagenPrincipal ? `${UPLOADS_BASE_URL}${item.imagenPrincipal}` : '/default-item.png'} 
                 alt={item.titulo} 
                 style={{ width: '100%', height: '150px', objectFit: 'cover', margin: '10px 0', display: 'block' }} 
             />
@@ -90,7 +96,8 @@ const ExplorePage = () => {
 
         try {
             // 2. Llamada al endpoint con los parámetros
-            const response = await axios.get(API_URL, { params });
+            // *** SOLUCIÓN 2: Usamos ITEMS_ENDPOINT en lugar de API_URL ***
+            const response = await axios.get(ITEMS_ENDPOINT, { params }); 
             
             // 3. Procesar la respuesta Page de Spring
             setItems(response.data.content); 
@@ -100,7 +107,12 @@ const ExplorePage = () => {
 
         } catch (err) {
             console.error("Error fetching items:", err);
-            setError("Error al cargar las prendas. Inténtalo más tarde.");
+            // Mostrar un error más descriptivo si el servidor responde con 4xx o 5xx
+            const errorMessage = err.response && err.response.data 
+                ? `Error: ${err.response.status} - ${err.response.data.message || 'Error del servidor'}`
+                : "Error al cargar las prendas. Revisa el backend.";
+                
+            setError(errorMessage);
             setLoading(false);
         }
     };

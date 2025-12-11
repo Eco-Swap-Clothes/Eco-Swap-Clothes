@@ -1,4 +1,4 @@
-// src/services/UserService.js (CÓDIGO COMPLETO CORREGIDO)
+// src/services/UserService.js (CÓDIGO FINAL CORREGIDO)
 
 import axios from 'axios';
 import AuthService from './AuthService'; 
@@ -8,10 +8,10 @@ const API_URL_USERS = 'http://localhost:8080/api/users/';
 
 class UserService {
     
+    // ... (getAuthHeaders es correcto) ...
     getAuthHeaders() {
         const token = AuthService.getCurrentToken();
         if (token) {
-            // Asegúrate de que el formato sea { Authorization: 'Bearer TOKEN' }
             return { Authorization: `Bearer ${token}` };
         }
         return {}; 
@@ -23,12 +23,10 @@ class UserService {
     async getCurrentUser() {
         const headers = this.getAuthHeaders();
         if (!headers.Authorization) {
-            // Se lanza error si no hay token
             throw new Error("No autenticado.");
         }
         
         const response = await axios.get(
-            // Usa la constante API_URL_USERS y añade 'me'
             API_URL_USERS + 'me', 
             { headers } 
         );
@@ -37,6 +35,7 @@ class UserService {
     
     /**
      * Obtiene los artículos del usuario autenticado.
+     * ¡Llamada a la ruta de perfil corregida: /api/users/me/items!
      */
     async getMyPublishedItems() {
         const headers = this.getAuthHeaders();
@@ -44,17 +43,14 @@ class UserService {
             throw new Error("No autenticado.");
         }
         
-        // CORRECCIÓN CLAVE: Eliminamos la barra diagonal al final del endpoint de ítems
-        // para que coincida exactamente con el mapeo del ItemController (/api/items).
-        const ITEM_API_URL = 'http://localhost:8080/api/items'; 
-        
+        // ¡CORRECCIÓN CLAVE! Llama al endpoint del usuario
         const response = await axios.get(
-            ITEM_API_URL, // <--- ¡SIN BARRA FINAL! Mapea a GET /api/items
+            API_URL_USERS + 'me/items', // <--- ¡Esta es la ruta correcta!
             { headers }
         );
         
-        // Si el backend devuelve un Page<ItemDTO>, extraemos el 'content'
-        return response.data.content || response.data; 
+        // Asumimos que el backend ya devuelve una lista
+        return response.data; 
     }
 }
 

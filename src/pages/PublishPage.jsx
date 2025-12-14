@@ -1,11 +1,11 @@
-// src/pages/PublishPage.jsx 
+
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ItemService from '../services/ItemService';
 
 const PublishPage = () => {
-    // --- ESTADOS ---
+   
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [puntosAGanar, setPuntosAGanar] = useState('');
@@ -18,7 +18,7 @@ const PublishPage = () => {
     const navigate = useNavigate();
 
     const handleFileChange = (e) => {
-        // Almacena el objeto File en el estado
+   
         setImagen(e.target.files[0]);
     };
 
@@ -27,14 +27,13 @@ const PublishPage = () => {
         setMessage('');
         setLoading(true);
 
-        // 1. VALIDACIÓN FRONTAL BÁSICA (Asegura campos llenos)
         if (!titulo || !puntosAGanar || !categoria || !imagen) {
             setMessage('Por favor, completa todos los campos obligatorios y sube una imagen.');
             setLoading(false);
             return;
         }
 
-        // 2. VALIDACIÓN DE PUNTOS (Asegura que sea un número válido y positivo)
+     
         const puntosNum = parseInt(puntosAGanar, 10);
         if (isNaN(puntosNum) || puntosNum <= 0) {
             setMessage('Los puntos deben ser un número entero positivo.');
@@ -42,27 +41,23 @@ const PublishPage = () => {
             return;
         }
 
-        // 3. CONSTRUCCIÓN DEL FormData (Para enviar texto y archivo)
         const formData = new FormData();
         formData.append('titulo', titulo);
         formData.append('descripcion', descripcion);
-        // CRUCIAL: Convertir el número de vuelta a cadena para FormData
+
         formData.append('puntosAGanar', puntosNum.toString()); 
         formData.append('categoria', categoria);
         
-        // CRUCIAL: El backend espera 'imagenPrincipal'
         formData.append('imagenPrincipal', imagen); 
-        
-        // NOTA: El campo 'estado' no se añade ya que el backend lo establece como DISPONIBLE.
+ 
 
         try {
-            // Llama a POST /api/items (Requiere token)
+     
             await ItemService.createItem(formData);
             
             setMessage('¡Prenda publicada con éxito! Ya está disponible en la comunidad.');
             setLoading(false);
 
-            // Redirigir después de 2 segundos
             setTimeout(() => {
                 navigate('/profile'); 
             }, 2000);
@@ -71,11 +66,9 @@ const PublishPage = () => {
             setLoading(false);
             console.error('Error al publicar prenda:', error.response || error);
             
-            // 4. MEJORA DEL MANEJO DE ERRORES para el 500 y 400 (Bad Request)
             const status = error.response ? error.response.status : null;
             let apiMessage = error.response && error.response.data && error.response.data.message;
 
-            // Si hay un error de validación de Spring, a veces el mensaje viene en el cuerpo.
             if (!apiMessage && status === 400 && error.response.data.errors) {
                 apiMessage = error.response.data.errors.map(err => err.defaultMessage).join(', ');
             }
@@ -85,7 +78,7 @@ const PublishPage = () => {
             } else if (status === 400) {
                 setMessage(`Error de validación (400): ${apiMessage || 'Verifica los datos enviados.'}`);
             } else if (status === 500) {
-                // Si llegamos a 500, hay un fallo interno del servidor (DTO, lógica, o I/O)
+                
                 setMessage('Error 500: Fallo interno del servidor. Revisa la consola del backend de Java.');
             } else if (apiMessage) {
                 setMessage(`Error al subir la prenda: ${apiMessage}`);
@@ -116,7 +109,7 @@ const PublishPage = () => {
             <h2>Publicar Prenda</h2>
             <form onSubmit={handleSubmit}>
                 
-                {/* 1. INPUT DE TÍTULO */}
+          
                 <div style={{ marginBottom: '20px' }}>
                     <label style={labelStyle}>Título de la Prenda (*)</label>
                     <input
@@ -129,7 +122,7 @@ const PublishPage = () => {
                     />
                 </div>
 
-                {/* 2. INPUT DE DESCRIPCIÓN */}
+               
                 <div style={{ marginBottom: '20px' }}>
                     <label style={labelStyle}>Descripción</label>
                     <textarea
@@ -140,7 +133,6 @@ const PublishPage = () => {
                     />
                 </div>
 
-                {/* 3. INPUT DE PUNTOS */}
                 <div style={{ marginBottom: '20px' }}>
                     <label style={labelStyle}>Puntos a Intercambiar (*)</label>
                     <input

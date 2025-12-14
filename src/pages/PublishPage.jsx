@@ -154,7 +154,6 @@ const PublishPage = () => {
                     />
                 </div>
 
-                {/* 4. SELECT DE CATEGORÍA */}
                 <div style={{ marginBottom: '20px' }}>
                     <label style={labelStyle}>Categoría (*)</label>
                     <select
@@ -173,7 +172,6 @@ const PublishPage = () => {
                     </select>
                 </div>
                 
-                {/* 5. SELECT DE ESTADO (Solo para mostrar el estado actual, el backend pone DISPONIBLE) */}
                 <div style={{ marginBottom: '20px' }}>
                     <label style={labelStyle}>Estado de la Prenda</label>
                     <select
@@ -186,8 +184,7 @@ const PublishPage = () => {
                         <option value="Aceptable">Aceptable</option>
                     </select>
                 </div>
-                
-                {/* 6. Input de Imagen Principal */}
+
                 <div style={{ marginBottom: '20px' }}>
                     <label style={labelStyle}>Fotos de la prenda (Principal): (*)</label>
                     <input

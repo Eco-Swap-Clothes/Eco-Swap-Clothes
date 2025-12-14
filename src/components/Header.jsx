@@ -25,14 +25,12 @@ const Header = () => {
                 <input type="text" placeholder="Buscar prendas..." style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
             </div>
 
-            {/* Botones de Navegación */}
+       
             <nav>
-                {/* Botón Publicar Ropa */}
                 <Link to="/publish" style={{ marginRight: '15px', padding: '8px 15px', backgroundColor: '#89BC01', color: 'white', borderRadius: '4px', textDecoration: 'none' }}>
-                    Publicar Ropa
+                    Inicia sesión
                 </Link>
 
-                {/* Botones de Auth/Perfil */}
                 {token ? (
                     <>
                         <Link to="/profile" style={{ marginRight: '15px', textDecoration: 'none', color: '#ffffff', fontWeight: 'bold' }}>

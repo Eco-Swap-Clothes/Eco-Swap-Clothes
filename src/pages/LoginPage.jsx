@@ -1,16 +1,15 @@
-// src/pages/LoginPage.jsx
+
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
-import { AuthContext } from '../context/AuthContext.jsx'; // Para actualizar el contexto
+import { AuthContext } from '../context/AuthContext.jsx'; 
 
 const LoginPage = () => {
     const [mail, setMail] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-    
-    // Obtenemos la función login del contexto para actualizar el estado global
+
     const { login } = useContext(AuthContext); 
 
     const handleLogin = async (e) => {
@@ -23,19 +22,17 @@ const LoginPage = () => {
         }
 
         try {
-            // Llama al servicio que conecta con POST /api/auth/login
+   
             // eslint-disable-next-line no-unused-vars
             const token = await login(mail, contrasena);
             
             setMessage('Inicio de sesión exitoso.');
-            
-            // Navegar al perfil o a la página de inicio después del login
+       
             navigate('/profile'); 
             
         } catch (error) {
             console.error('Error durante el inicio de sesión:', error);
             
-            // Muestra mensajes de error específicos (401 Unauthorized, 500 Internal Server Error)
             if (error.response && error.response.status === 401) {
                  setMessage('Error: Credenciales inválidas. Email o contraseña incorrectos.');
             } else if (error.response && error.response.status === 500) {

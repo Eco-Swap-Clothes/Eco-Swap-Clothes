@@ -1,10 +1,8 @@
-// src/pages/ProfilePage.jsx (CÓDIGO COMPLETO Y SEGURO)
 
 import React, { useState, useEffect, useContext } from 'react';
-import ItemCard from '../components/ItemCard.jsx'; // Nota la extensión .jsx
+import ItemCard from '../components/ItemCard.jsx'; 
 import { AuthContext } from '../context/AuthContext.jsx'; 
 import UserService from '../services/UserService'; 
-// NO necesitamos axios aquí ya que usamos UserService
 
 const BASE_UPLOADS_URL = 'http://localhost:8080/uploads/';
 
@@ -13,8 +11,7 @@ const ProfilePage = () => {
     const [publishedItems, setPublishedItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
-    // Obtenemos el token y la función logout del contexto
+
     // eslint-disable-next-line no-unused-vars
     const { token, logout } = useContext(AuthContext); 
 
@@ -27,11 +24,10 @@ const ProfilePage = () => {
             }
 
             try {
-                // 1. Obtener Perfil usando UserService
+            
                 const userData = await UserService.getCurrentUser();
                 setUser(userData);
-                
-                // 2. Obtener Prendas Publicadas
+              
                 const itemsData = await UserService.getMyPublishedItems();
                 setPublishedItems(itemsData); 
 
@@ -41,7 +37,7 @@ const ProfilePage = () => {
                 
                 if (err.message && err.message.includes("No autenticado")) {
                      setError("Sesión expirada o inválida. Intenta iniciar sesión de nuevo.");
-                     // Si la sesión expira, podrías llamar a logout() aquí
+       
                 } else {
                      setError("Error al cargar el perfil o las prendas. Revisa el backend.");
                 }
@@ -51,32 +47,27 @@ const ProfilePage = () => {
         fetchData();
     }, [token]); 
 
-    // --- MANEJO DE ESTADOS ---
     if (loading) return <p style={{ textAlign: 'center' }}>Cargando perfil...</p>;
     if (error) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
 
-    // CLAVE: Evita errores de "Cannot read properties of null"
     if (!user) {
         return <p style={{ textAlign: 'center', color: 'orange' }}>No se pudo cargar la información del usuario.</p>;
     }
-    
-    // --- Lógica de Extracción de Datos (Ahora segura) ---
+
     const totalPuntos = user.puntos || 0;
     const itemsPublicadosCount = publishedItems.length || 0;
     const valoracion = user.valoracion || 0;
     
-    // Construcción de la URL de la imagen de perfil
     const profileImageUrl = user.imagenPerfil 
         ? `${BASE_UPLOADS_URL}${user.imagenPerfil}` 
-        : '/default-avatar.png'; // Debe existir en la carpeta /public
+        : '/default-avatar.png'; 
 
     return (
         <div style={{ maxWidth: '900px', margin: 'auto', padding: '20px' }}>
-            {/* Cabecera del Perfil */}
+       
             <div style={{ background: '#38a169', color: 'white', padding: '20px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     
-                    {/* Contenedor de la Imagen de Perfil */}
                     <img 
                         src={profileImageUrl}
                         alt={user.nombre}
@@ -103,7 +94,6 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-            {/* Métricas */}
             <div style={{ background: 'white', padding: '20px', borderRadius: '8px', marginTop: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
                      <div>
@@ -117,7 +107,6 @@ const ProfilePage = () => {
                 </div>
              </div>
 
-            {/* Mis Prendas Publicadas */}
             <h2 style={{ marginTop: '30px', borderBottom: '2px solid #38a169', paddingBottom: '5px' }}>Mis Prendas Publicadas</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px', marginTop: '20px' }}>
                 {publishedItems.length > 0 ? (

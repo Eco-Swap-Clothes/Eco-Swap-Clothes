@@ -1,39 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
-
-// src/pages/ExplorePage.jsx (CORREGIDO Y AMPLIADO)
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AuthService from '../services/AuthService'; 
 
-// *** SOLUCIÓN 1: DEFINICIÓN DE LA URL DE LA API ***
-// Definimos la URL base del servidor de la API
 const API_BASE_URL = 'http://localhost:8080/api';
-// Definimos el endpoint completo para obtener ítems
 const ITEMS_ENDPOINT = `${API_BASE_URL}/items`;
-// ----------------------------------------------------
 
-// Asumo que tu ItemCard estará en su propio archivo, pero mantengo la simple implementación aquí
 const SimpleItemCard = ({ item }) => {
-    // Usamos el mismo BASE_URL que la lógica de Java, solo para las imágenes
+
     const UPLOADS_BASE_URL = 'http://localhost:8080/uploads/';
     const isAuthenticated = AuthService.getCurrentToken() !== null; 
 
-    // Función de ejemplo para manejar la reserva (requeriría una llamada a ItemService)
     const handleReserve = (itemId) => {
         if (!isAuthenticated) {
             alert("Debes iniciar sesión para reservar un artículo.");
-            // Aquí deberías redirigir a /login
+          
         } else {
-            // Aquí iría la llamada a ItemService.reservarItem(itemId)
+        
             alert(`Reservando artículo ${itemId}... (Requiere implementación del servicio)`);
         }
     }
 
     return (
         <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', margin: '10px', backgroundColor: 'white' }}>
-            {/* Imagen: Se mantiene la corrección de URL */}
+         
             <img 
                 src={item.imagenPrincipal ? `${UPLOADS_BASE_URL}${item.imagenPrincipal}` : '/default-item.png'} 
                 alt={item.titulo} 
@@ -59,28 +49,24 @@ const SimpleItemCard = ({ item }) => {
         </div>
     );
 };
-// --- FIN SimpleItemCard ---
 
 const ExplorePage = () => {
-    // ESTADOS PARA DATOS Y LECTURA
+
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // [ESTADOS PARA FILTROS]
-    const [categoriaFiltro, setCategoriaFiltro] = useState(''); // '' es 'Todas'
-    const [fechaDesdeFiltro, setFechaDesdeFiltro] = useState(''); // Formato YYYY-MM-DD
+    const [categoriaFiltro, setCategoriaFiltro] = useState(''); 
+    const [fechaDesdeFiltro, setFechaDesdeFiltro] = useState(''); 
 
-    // [ESTADOS PARA PAGINACIÓN]
-    const [currentPage, setCurrentPage] = useState(0); // El backend usa 0-indexed
+    const [currentPage, setCurrentPage] = useState(0); 
     const [totalPages, setTotalPages] = useState(0);
-    const pageSize = 12; // Número de elementos por página fijo (puedes ajustar)
+    const pageSize = 12; 
 
     const fetchItems = async () => {
         setLoading(true);
         setError(null);
-        
-        // 1. Construir los parámetros de la API
+       
         const params = { 
             page: currentPage, 
             size: pageSize 
@@ -90,24 +76,22 @@ const ExplorePage = () => {
             params.categoria = categoriaFiltro;
         }
         if (fechaDesdeFiltro) {
-            // El backend ItemService.java espera LocalDate (YYYY-MM-DD)
+          
             params.fechaDesde = fechaDesdeFiltro; 
         }
 
         try {
-            // 2. Llamada al endpoint con los parámetros
-            // *** SOLUCIÓN 2: Usamos ITEMS_ENDPOINT en lugar de API_URL ***
+           
             const response = await axios.get(ITEMS_ENDPOINT, { params }); 
-            
-            // 3. Procesar la respuesta Page de Spring
+        
             setItems(response.data.content); 
-            setCurrentPage(response.data.number); // Página actual
-            setTotalPages(response.data.totalPages); // Total de páginas
+            setCurrentPage(response.data.number); 
+            setTotalPages(response.data.totalPages); 
             setLoading(false);
 
         } catch (err) {
             console.error("Error fetching items:", err);
-            // Mostrar un error más descriptivo si el servidor responde con 4xx o 5xx
+           
             const errorMessage = err.response && err.response.data 
                 ? `Error: ${err.response.status} - ${err.response.data.message || 'Error del servidor'}`
                 : "Error al cargar las prendas. Revisa el backend.";
@@ -117,12 +101,10 @@ const ExplorePage = () => {
         }
     };
 
-    // [EFFECT]: Se ejecuta al inicio, y cada vez que cambie la página o un filtro
     useEffect(() => {
         fetchItems();
     }, [currentPage, categoriaFiltro, fechaDesdeFiltro]); 
 
-    // --- MANEJADORES DE PAGINACIÓN ---
     const handleNextPage = () => {
         if (currentPage < totalPages - 1) {
             setCurrentPage(currentPage + 1);
@@ -134,13 +116,12 @@ const ExplorePage = () => {
             setCurrentPage(currentPage - 1);
         }
     };
-    
-    // --- MANEJADOR DE FILTROS ---
+
     const handleCategoryFilter = (category) => {
-        // Si se presiona el filtro 'Todas' o el mismo filtro actual, lo reseteamos
+       
         const newCategory = category === 'Todas' ? '' : category;
         setCategoriaFiltro(newCategory);
-        setCurrentPage(0); // Siempre volvemos a la página 0 al aplicar un nuevo filtro
+        setCurrentPage(0); 
     }
 
 
@@ -151,7 +132,6 @@ const ExplorePage = () => {
         <div style={{ padding: '20px' }}>
             <h2>Explorar Prendas ({items.length} encontradas)</h2>
             
-            {/* Sección de Filtros */}
             <div style={{ marginBottom: '20px' }}>
                 <h4 style={{ marginBottom: '10px' }}>Filtrar por Categoría:</h4>
                 <div style={{ display: 'flex', gap: '10px', overflowX: 'auto' }}>
@@ -178,13 +158,12 @@ const ExplorePage = () => {
                     value={fechaDesdeFiltro}
                     onChange={(e) => {
                         setFechaDesdeFiltro(e.target.value);
-                        setCurrentPage(0); // Resetear página al cambiar filtro
+                        setCurrentPage(0); 
                     }}
                     style={{ padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
                 />
             </div>
 
-            {/* Listado de Artículos */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
                 {items.length > 0 ? (
                     items.map(item => (
@@ -194,8 +173,7 @@ const ExplorePage = () => {
                     <p style={{ gridColumn: '1 / -1', textAlign: 'center' }}>No se encontraron prendas con los filtros aplicados.</p>
                 )}
             </div>
-            
-            {/* Controles de Paginación */}
+  
             {totalPages > 1 && (
                 <div style={{ textAlign: 'center', marginTop: '30px' }}>
                     <button 

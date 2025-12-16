@@ -1,26 +1,25 @@
-// src/components/Header.jsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext.jsx'; // Importar el contexto
+import { AuthContext } from '../context/AuthContext.jsx'; 
 
 const Header = () => {
-    // Aquí puedes usar el hook useAuth si lo exportaste directamente, o useContext
+
     const { token, logout } = useContext(AuthContext); 
     
-    // Función para manejar el cierre de sesión
     const handleLogout = () => {
         logout();
     };
 
     return (
         <header style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 50px', backgroundColor: '#2f573c', alignItems: 'center' }}>
-            {/* Logo/Título (EcoSwap) */}
+          
             <Link to="/" style={{ fontSize: '24px', fontWeight: 'bold', color: '#ffffff', textDecoration: 'none' }}>
                 EcoSwap
             </Link>
 
-            {/* Búsqueda (Asumiendo que el campo de búsqueda existe) */}
+         
             <div className="search-bar">
                 <input type="text" placeholder="Buscar prendas..." style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
             </div>

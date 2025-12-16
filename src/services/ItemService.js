@@ -16,7 +16,6 @@ class ItemService {
     }
 
     /**
-     * 
      * @param {FormData} formData 
      */
     async createItem(formData) {

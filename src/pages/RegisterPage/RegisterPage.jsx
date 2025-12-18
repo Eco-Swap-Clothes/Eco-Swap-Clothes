@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
 import { FaLeaf, FaUser, FaEnvelope, FaLock, FaUserPlus } from 'react-icons/fa';
-import './RegisterPage.css';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({

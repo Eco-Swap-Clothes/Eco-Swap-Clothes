@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import ItemService from '../../services/ItemService';
 import { AuthContext } from '../../context/AuthContext';
 import { FaUpload, FaCheckCircle } from 'react-icons/fa';
-import './PublishPage.css';
 
 const PublishPage = () => {
     const [formData, setFormData] = useState({

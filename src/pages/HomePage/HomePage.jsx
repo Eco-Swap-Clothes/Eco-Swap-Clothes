@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLeaf, FaRecycle, FaUsers, FaHandshake, FaArrowRight, FaStar } from 'react-icons/fa';
+import Logo from '../../assets/Logo.png';
 
 const HomePage = () => {
     return (
@@ -10,7 +11,7 @@ const HomePage = () => {
                 <div className="container mx-auto max-w-4xl">
                     <div className="text-center">
                         <div className="flex justify-center mb-6">
-                            <img src="/Logo.png" alt="EcoSwap Logo" className="h-32 w-auto" />
+                            <img src={Logo} alt="EcoSwap Logo" className="h-32 w-auto" />
                         </div>
                         <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gray-800">
                             Bienvenido a EcoSwap

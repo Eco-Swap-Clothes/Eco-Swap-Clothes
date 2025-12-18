@@ -78,7 +78,6 @@ const Header = () => {
                     </div>
                 </div>
 
-                {/* Mobile Navigation */}
                 <nav className="md:hidden flex justify-center gap-4 mt-4 pt-4 border-t border-gray-400">
                     <Link to="/" className="hover:opacity-80 transition-opacity text-sm font-medium">
                         Inicio

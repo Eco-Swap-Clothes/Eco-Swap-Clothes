@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ItemService from '../../services/ItemService';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import { FaSearch, FaFilter } from 'react-icons/fa';
-import './ExplorePage.css';
 
 const ExplorePage = () => {
     const [items, setItems] = useState([]);

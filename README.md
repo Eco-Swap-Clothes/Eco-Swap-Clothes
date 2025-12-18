@@ -14,7 +14,7 @@ EcoSwap es una Aplicación de Página Única (SPA) desarrollada con React.js y e
 ## Tecnologías Utilizadas
 - **Framework Frontend:** React.js
 - **Lenguaje:** JavaScript
-- **Estilización:** Estilos en línea
+- **Estilización:** Tailwinds
 - **Comunicación con API:** Axios o Fetch para conectarse con la API de Spring Boot
 
 ---
@@ -35,13 +35,13 @@ EcoSwap es una Aplicación de Página Única (SPA) desarrollada con React.js y e
 - **Autenticación por Token:** Todos los endpoints que requieren acciones sobre artículos o perfil requieren un JWT válido.
 - **Control de Propiedad:** Un usuario solo puede modificar o eliminar sus propios artículos y reservas.
 - **Diseño Responsivo:** La interfaz debe adaptarse a cualquier dispositivo y mantener alta legibilidad y accesibilidad.
-- **Estilo Consistente:** Estilos en línea
+- **Estilo Consistente:** Tailwinds
 
 ---
 ## Metodología
 - El proyecto fue desarrollado de forma individual (Desarrollador Full-Stack y Product Owner) bajo un sprint ágil de dos semanas. El proceso se enfocó en:
 - **Definición de Requisitos:** Historias de usuario desglosadas por funcionalidad (Artículos, Reservas, Puntos, Auth).
-- **Diseño UI/UX:** Implementación de una interfaz intuitiva, responsiva y accesible con  .
+- **Diseño UI/UX:** Implementación de una interfaz intuitiva, responsiva y accesible con Tailwinds  .
 - **Conexión API:** Integración de la autenticación y operaciones CRUD con el backend Spring Boot.
 
 ## Pasos para Iniciar

@@ -1,13 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import { expect, afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-// Cleanup after each test
 afterEach(() => {
   cleanup();
 });
 
-// Mock localStorage with actual storage
 const storageMock = (() => {
   let store = {};
   return {
@@ -24,9 +23,9 @@ const storageMock = (() => {
   };
 })();
 
+// eslint-disable-next-line no-undef
 global.localStorage = storageMock;
 
-// Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation(query => ({

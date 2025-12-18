@@ -21,7 +21,7 @@ const ItemCard = ({ item }) => {
 
     return (
         <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-200">
-            {/* Image */}
+         
             <div className="relative h-56 overflow-hidden bg-gray-100">
                 <img
                     src={imageUrl}
@@ -31,7 +31,7 @@ const ItemCard = ({ item }) => {
                         e.target.src = '/placeholder-clothing.jpg';
                     }}
                 />
-                {/* Estado Badge */}
+           
                 <div className="absolute top-3 right-3">
                     <span className={`${estadoColor} px-3 py-1 rounded-full text-xs font-semibold shadow-md`}>
                         {item.estado || 'N/A'}
@@ -39,21 +39,18 @@ const ItemCard = ({ item }) => {
                 </div>
             </div>
 
-            {/* Content */}
             <div className="p-4">
-                {/* Title */}
+              
                 <h3 className="text-lg font-bold text-gray-800 mb-2 truncate">
                     {item.titulo}
                 </h3>
 
-                {/* Description */}
                 <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[2.5rem]">
                     {item.descripcion || 'Sin descripción'}
                 </p>
 
-                {/* Details Grid */}
                 <div className="space-y-2 mb-4">
-                    {/* Category & Size */}
+      
                     <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-1 text-gray-700">
                             <FaTshirt className="text-green-600" />
@@ -65,7 +62,6 @@ const ItemCard = ({ item }) => {
                         </div>
                     </div>
 
-                    {/* Location if available */}
                     {item.ubicacion && (
                         <div className="flex items-center gap-1 text-sm text-gray-600">
                             <FaMapMarkerAlt className="text-green-600" />
@@ -74,9 +70,8 @@ const ItemCard = ({ item }) => {
                     )}
                 </div>
 
-                {/* Footer */}
                 <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                    {/* Rating */}
+           
                     <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500 text-sm" />
                         <span className="text-sm font-semibold text-gray-700">
@@ -84,7 +79,7 @@ const ItemCard = ({ item }) => {
                         </span>
                     </div>
 
-                    {/* View Details Button */}
+  
                     <button className="bg-green-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
                         Ver Detalles
                     </button>

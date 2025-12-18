@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import UserService from './UserService';
 import apiClient from '../config/api';
 
-// Mock apiClient
 vi.mock('../config/api', () => ({
   default: {
     get: vi.fn(),

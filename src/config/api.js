@@ -18,11 +18,11 @@ apiClient.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
 
-        console.log(`🌐 ${config.method.toUpperCase()} ${config.url}`);
+        console.log(` ${config.method.toUpperCase()} ${config.url}`);
         if (config.data && !(config.data instanceof FormData)) {
-            console.log('📤 Request data:', config.data);
+            console.log(' Request data:', config.data);
         } else if (config.data instanceof FormData) {
-            console.log('📤 Request FormData:');
+            console.log(' Request FormData:');
             for (let pair of config.data.entries()) {
                 console.log(`  ${pair[0]}:`, pair[1]);
             }
@@ -31,24 +31,24 @@ apiClient.interceptors.request.use(
         return config;
     },
     (error) => {
-        console.error('❌ Request error:', error);
+        console.error(' Request error:', error);
         return Promise.reject(error);
     }
 );
 
 apiClient.interceptors.response.use(
     (response) => {
-        console.log(`✅ ${response.config.method.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
-        console.log('📥 Response data:', response.data);
+        console.log(` ${response.config.method.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
+        console.log(' Response data:', response.data);
         return response;
     },
     (error) => {
         if (error.response) {
-            console.error(`❌ ${error.config?.method?.toUpperCase() || 'REQUEST'} ${error.config?.url || 'unknown'} - Status: ${error.response.status}`);
-            console.error('📥 Error response:', error.response.data);
+            console.error(` ${error.config?.method?.toUpperCase() || 'REQUEST'} ${error.config?.url || 'unknown'} - Status: ${error.response.status}`);
+            console.error('Error response:', error.response.data);
 
             if (error.response.status === 401) {
-                console.warn('🔒 No autenticado. Redirigiendo al login...');
+                console.warn(' No autenticado. Redirigiendo al login...');
                 localStorage.removeItem('token');
                 if (window.location.pathname !== '/login') {
                     window.location.href = '/login';
@@ -61,11 +61,11 @@ apiClient.interceptors.response.use(
 
             error.message = errorMessage;
         } else if (error.request) {
-            console.error('❌ No response from server');
+            console.error(' No response from server');
             console.error('Request:', error.request);
             error.message = `No se pudo conectar con el servidor. Verifica que el backend esté corriendo en ${API_BASE_URL}`;
         } else {
-            console.error('❌ Error:', error.message);
+            console.error(' Error:', error.message);
         }
 
         return Promise.reject(error);

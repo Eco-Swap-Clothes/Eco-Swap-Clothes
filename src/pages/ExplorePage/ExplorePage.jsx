@@ -40,7 +40,6 @@ const ExplorePage = () => {
         const matchesCategory = selectedCategory === 'Todas' || item.categoria === selectedCategory;
         const matchesSize = selectedSize === 'Todas' || item.talla === selectedSize;
 
-        // Filter by date if selected
         let matchesDate = true;
         if (filterDate) {
             const itemDate = new Date(item.fechaCreacion);
@@ -50,7 +49,7 @@ const ExplorePage = () => {
 
         return matchesSearch && matchesCategory && matchesSize && matchesDate;
     }).sort((a, b) => {
-        // Sort by most recent first
+
         const dateA = new Date(a.fechaCreacion);
         const dateB = new Date(b.fechaCreacion);
         return dateB - dateA;
@@ -85,17 +84,13 @@ const ExplorePage = () => {
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-7xl">
-            {/* Header */}
             <div className="text-center mb-8">
                 <h1 className="text-4xl font-bold text-gray-800 mb-3">Explorar Prendas</h1>
                 <p className="text-gray-600 text-lg">
                     Descubre prendas únicas y sostenibles de nuestra comunidad
                 </p>
             </div>
-
-            {/* Search and Filters */}
             <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                {/* Search Bar */}
                 <div className="mb-6">
                     <div className="relative">
                         <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -108,14 +103,11 @@ const ExplorePage = () => {
                         />
                     </div>
                 </div>
-
-                {/* Filters */}
                 <div className="flex items-center gap-4 mb-4">
                     <FaFilter className="text-gray-600" />
                     <span className="font-semibold text-gray-700">Filtros:</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Category Filter */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Categoría
@@ -131,7 +123,6 @@ const ExplorePage = () => {
                         </select>
                     </div>
 
-                    {/* Size Filter */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Talla
@@ -147,7 +138,6 @@ const ExplorePage = () => {
                         </select>
                     </div>
 
-                    {/* Filter by Date */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Filtrar por Fecha
@@ -162,14 +152,12 @@ const ExplorePage = () => {
                 </div>
             </div>
 
-            {/* Results Count */}
             <div className="mb-6">
                 <p className="text-gray-600">
                     Mostrando <span className="font-bold text-green-600">{filteredItems.length}</span> de {items.length} prendas
                 </p>
             </div>
 
-            {/* Items Grid */}
             {filteredItems.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredItems.map(item => (

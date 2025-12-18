@@ -16,7 +16,7 @@ const Header = () => {
         <header className="bg-eco-primary text-white shadow-lg">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
-                    {/* Logo and Brand */}
+                 
                     <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
                         <div>
                             <h1 className="text-2xl font-bold">EcoSwap</h1>
@@ -24,7 +24,7 @@ const Header = () => {
                         </div>
                     </Link>
 
-                    {/* Navigation */}
+             
                     <nav className="hidden md:flex items-center gap-6">
                         <Link to="/" className="hover:opacity-80 transition-opacity font-medium">
                             Inicio
@@ -39,7 +39,6 @@ const Header = () => {
                         )}
                     </nav>
 
-                    {/* Auth Buttons */}
                     <div className="flex items-center gap-3">
                         {isAuthenticated ? (
                             <>

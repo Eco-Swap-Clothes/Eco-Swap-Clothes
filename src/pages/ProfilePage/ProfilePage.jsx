@@ -26,6 +26,7 @@ const ProfilePage = () => {
     const { token } = useContext(AuthContext);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/immutability
         fetchData();
     }, [token]);
 
@@ -105,10 +106,8 @@ const ProfilePage = () => {
 
             await ItemService.updateItem(editingItem.id, formData);
 
-            // Refresh the items list
             await fetchData();
 
-            // Close modal
             setEditingItem(null);
             alert('Prenda actualizada exitosamente');
         } catch (err) {
@@ -170,10 +169,8 @@ const ProfilePage = () => {
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
-            {/* Profile Header Card */}
             <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl shadow-xl p-8 text-white mb-8">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    {/* User Info */}
                     <div className="flex flex-col md:flex-row items-center gap-6">
                         <img
                             src={profileImageUrl}
@@ -192,7 +189,6 @@ const ProfilePage = () => {
                         </div>
                     </div>
 
-                    {/* Points Badge */}
                     <div className="bg-green-500 rounded-xl px-8 py-4 text-center shadow-md">
                         <p className="text-sm font-semibold uppercase tracking-wide mb-1">Tus Puntos</p>
                         <p className="text-5xl font-bold">{totalPuntos}</p>
@@ -200,7 +196,6 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-            {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                     <div className="flex items-center gap-4">
@@ -231,7 +226,6 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-            {/* Published Items Section */}
             <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-green-600">
                     Mis Prendas Publicadas
@@ -241,7 +235,7 @@ const ProfilePage = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {publishedItems.map(item => (
                             <div key={item.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
-                                {/* Image */}
+                          
                                 <div className="relative h-48 overflow-hidden bg-gray-100">
                                     <img
                                         src={item.imagenPrincipal ? `${BASE_UPLOADS_URL}${item.imagenPrincipal}` : '/placeholder-clothing.jpg'}
@@ -250,7 +244,6 @@ const ProfilePage = () => {
                                     />
                                 </div>
 
-                                {/* Content */}
                                 <div className="p-4">
                                     <h3 className="text-lg font-bold text-gray-800 mb-2 truncate">
                                         {item.titulo}
@@ -259,7 +252,6 @@ const ProfilePage = () => {
                                         {item.descripcion || 'Sin descripción'}
                                     </p>
 
-                                    {/* Action Buttons */}
                                     <div className="flex gap-2 mt-4">
                                         <button
                                             onClick={() => handleEditClick(item)}
@@ -291,7 +283,6 @@ const ProfilePage = () => {
                 )}
             </div>
 
-            {/* Edit Modal */}
             {editingItem && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -299,7 +290,7 @@ const ProfilePage = () => {
                             <h2 className="text-2xl font-bold text-gray-800 mb-6">Editar Prenda</h2>
 
                             <form onSubmit={handleEditSubmit} className="space-y-4">
-                                {/* Título */}
+                           
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Título *
@@ -314,7 +305,6 @@ const ProfilePage = () => {
                                     />
                                 </div>
 
-                                {/* Descripción */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Descripción *
@@ -329,7 +319,6 @@ const ProfilePage = () => {
                                     />
                                 </div>
 
-                                {/* Categoría */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Categoría *
@@ -351,7 +340,6 @@ const ProfilePage = () => {
                                     </select>
                                 </div>
 
-                                {/* Talla */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Talla
@@ -372,7 +360,6 @@ const ProfilePage = () => {
                                     </select>
                                 </div>
 
-                                {/* Estado de la Prenda */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Estado de la Prenda
@@ -391,7 +378,6 @@ const ProfilePage = () => {
                                     </select>
                                 </div>
 
-                                {/* Ubicación */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Ubicación
@@ -406,7 +392,6 @@ const ProfilePage = () => {
                                     />
                                 </div>
 
-                                {/* Buttons */}
                                 <div className="flex gap-3 pt-4">
                                     <button
                                         type="submit"

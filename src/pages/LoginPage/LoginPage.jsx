@@ -54,7 +54,7 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-green-50 to-green-100">
             <div className="max-w-md w-full">
-                {/* Logo and Title */}
+               
                 <div className="text-center mb-8">
                     <div className="flex justify-center mb-4">
                         <div className="bg-green-600 p-4 rounded-full">
@@ -65,7 +65,6 @@ const LoginPage = () => {
                     <p className="text-gray-600">Bienvenido de vuelta a EcoSwap</p>
                 </div>
 
-                {/* Login Form */}
                 <div className="bg-white rounded-xl shadow-lg p-8">
                     {error && (
                         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
@@ -74,7 +73,6 @@ const LoginPage = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Email Field */}
                         <div>
                             <label htmlFor="mail" className="block text-sm font-medium text-gray-700 mb-2">
                                 Correo Electrónico
@@ -94,7 +92,6 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                 Contraseña
@@ -114,7 +111,6 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}
@@ -134,7 +130,6 @@ const LoginPage = () => {
                         </button>
                     </form>
 
-                    {/* Register Link */}
                     <div className="mt-6 text-center">
                         <p className="text-gray-600">
                             ¿No tienes una cuenta?{' '}
@@ -145,7 +140,6 @@ const LoginPage = () => {
                     </div>
                 </div>
 
-                {/* Back to Home */}
                 <div className="text-center mt-6">
                     <Link to="/" className="text-gray-600 hover:text-gray-800">
                         ← Volver al inicio

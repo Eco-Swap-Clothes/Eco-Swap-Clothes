@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import AuthService from './AuthService';
 import apiClient from '../config/api';
 
-// Mock apiClient
 vi.mock('../config/api', () => ({
   default: {
     post: vi.fn(),
@@ -11,7 +10,7 @@ vi.mock('../config/api', () => ({
 
 describe('AuthService', () => {
   beforeEach(() => {
-    // Clear all mocks before each test
+
     vi.clearAllMocks();
     localStorage.clear();
   });

@@ -20,6 +20,7 @@ const PublishPage = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    // eslint-disable-next-line no-unused-vars
     const { token } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -52,7 +53,6 @@ const PublishPage = () => {
         e.preventDefault();
         setError('');
 
-        // Validation
         if (!formData.titulo || !formData.descripcion || !formData.categoria ||
             !formData.talla || !formData.estado) {
             setError('Por favor, completa todos los campos obligatorios');
@@ -113,7 +113,7 @@ const PublishPage = () => {
     return (
         <div className="min-h-screen px-4 py-12 bg-gradient-to-br from-green-50 to-green-100">
             <div className="max-w-3xl mx-auto">
-                {/* Header */}
+       
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-gray-800 mb-3">Publicar Prenda</h1>
                     <p className="text-gray-600 text-lg">
@@ -121,7 +121,6 @@ const PublishPage = () => {
                     </p>
                 </div>
 
-                {/* Form */}
                 <div className="bg-white rounded-xl shadow-lg p-8">
                     {error && (
                         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
@@ -130,7 +129,7 @@ const PublishPage = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Image Upload */}
+                  
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Imagen de la Prenda *
@@ -176,7 +175,6 @@ const PublishPage = () => {
                             </div>
                         </div>
 
-                        {/* Title */}
                         <div>
                             <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-2">
                                 Título *
@@ -193,7 +191,6 @@ const PublishPage = () => {
                             />
                         </div>
 
-                        {/* Description */}
                         <div>
                             <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-2">
                                 Descripción *
@@ -210,7 +207,6 @@ const PublishPage = () => {
                             />
                         </div>
 
-                        {/* Category and Size */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="categoria" className="block text-sm font-medium text-gray-700 mb-2">
@@ -251,7 +247,6 @@ const PublishPage = () => {
                             </div>
                         </div>
 
-                        {/* Estado */}
                         <div>
                             <label htmlFor="estado" className="block text-sm font-medium text-gray-700 mb-2">
                                 Estado *
@@ -271,7 +266,6 @@ const PublishPage = () => {
                             </select>
                         </div>
 
-                        {/* Location */}
                         <div>
                             <label htmlFor="ubicacion" className="block text-sm font-medium text-gray-700 mb-2">
                                 Ubicación (opcional)
@@ -287,7 +281,6 @@ const PublishPage = () => {
                             />
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}

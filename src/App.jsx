@@ -28,7 +28,7 @@ function App() {
       
         <div className="App min-h-screen flex flex-col">
             <Header />
-            <main className="flex-grow">
+            <main className="grow">
                 <Routes>
                
                     <Route path="/" element={<HomePage />} />

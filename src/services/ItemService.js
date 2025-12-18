@@ -3,17 +3,13 @@ import apiClient from '../config/api';
 
 class ItemService {
 
-    /**
-     * Obtener todos los items publicados
-     */
     async getAllItems() {
         const response = await apiClient.get('/api/items');
-        // Backend returns paginated data, extract the content array
+
         return response.data.content || response.data;
     }
 
     /**
-     * Crear un nuevo item
      * @param {FormData} formData
      */
     async createItem(formData) {
@@ -32,7 +28,6 @@ class ItemService {
     }
 
     /**
-     * Actualizar un item existente
      * @param {number} itemId
      * @param {FormData} formData
      */
@@ -52,7 +47,6 @@ class ItemService {
     }
 
     /**
-     * Eliminar un item
      * @param {number} itemId
      */
     async deleteItem(itemId) {

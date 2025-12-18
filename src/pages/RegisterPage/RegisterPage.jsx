@@ -27,7 +27,6 @@ const RegisterPage = () => {
         e.preventDefault();
         setError('');
 
-        // Validation
         if (!formData.nombre || !formData.mail || !formData.password || !formData.confirmPassword) {
             setError('Por favor, completa todos los campos');
             return;
@@ -64,7 +63,7 @@ const RegisterPage = () => {
     return (
         <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-green-50 to-green-100">
             <div className="max-w-md w-full">
-                {/* Logo and Title */}
+
                 <div className="text-center mb-8">
                     <div className="flex justify-center mb-4">
                         <div className="bg-green-600 p-4 rounded-full">
@@ -75,7 +74,6 @@ const RegisterPage = () => {
                     <p className="text-gray-600">Únete a la comunidad EcoSwap</p>
                 </div>
 
-                {/* Register Form */}
                 <div className="bg-white rounded-xl shadow-lg p-8">
                     {error && (
                         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
@@ -84,7 +82,7 @@ const RegisterPage = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Name Field */}
+                     
                         <div>
                             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
                                 Nombre Completo
@@ -104,7 +102,6 @@ const RegisterPage = () => {
                             </div>
                         </div>
 
-                        {/* Email Field */}
                         <div>
                             <label htmlFor="mail" className="block text-sm font-medium text-gray-700 mb-2">
                                 Correo Electrónico
@@ -124,7 +121,6 @@ const RegisterPage = () => {
                             </div>
                         </div>
 
-                        {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                 Contraseña
@@ -145,7 +141,6 @@ const RegisterPage = () => {
                             <p className="mt-1 text-xs text-gray-500">Mínimo 6 caracteres</p>
                         </div>
 
-                        {/* Confirm Password Field */}
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                 Confirmar Contraseña
@@ -165,7 +160,6 @@ const RegisterPage = () => {
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}
@@ -185,7 +179,6 @@ const RegisterPage = () => {
                         </button>
                     </form>
 
-                    {/* Login Link */}
                     <div className="mt-6 text-center">
                         <p className="text-gray-600">
                             ¿Ya tienes una cuenta?{' '}
@@ -196,7 +189,6 @@ const RegisterPage = () => {
                     </div>
                 </div>
 
-                {/* Back to Home */}
                 <div className="text-center mt-6">
                     <Link to="/" className="text-gray-600 hover:text-gray-800">
                         ← Volver al inicio

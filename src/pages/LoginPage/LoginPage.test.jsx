@@ -1,10 +1,24 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 import LoginPage from './LoginPage';
 
+const mockAuthValue = {
+  isAuthenticated: false,
+  login: () => {},
+  logout: () => {},
+  user: null,
+};
+
 const renderWithRouter = (component) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
+  return render(
+    <BrowserRouter>
+      <AuthContext.Provider value={mockAuthValue}>
+        {component}
+      </AuthContext.Provider>
+    </BrowserRouter>
+  );
 };
 
 describe('LoginPage', () => {

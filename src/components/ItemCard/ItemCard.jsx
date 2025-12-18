@@ -1,7 +1,6 @@
 import React from 'react';
 import { FaStar, FaTshirt, FaMapMarkerAlt, FaTag } from 'react-icons/fa';
 import { API_BASE_URL } from '../../config/api';
-import './ItemCard.css';
 
 const BASE_UPLOADS_URL = `${API_BASE_URL}/uploads/`;
 

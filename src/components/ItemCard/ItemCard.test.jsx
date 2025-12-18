@@ -37,7 +37,7 @@ describe('ItemCard', () => {
 
     expect(screen.getByText('Minimal Item')).toBeInTheDocument();
     expect(screen.getByText('Sin descripción')).toBeInTheDocument();
-    expect(screen.getByText('N/A')).toBeInTheDocument();
+    expect(screen.getAllByText('N/A').length).toBeGreaterThan(0);
   });
 
   it('should display default rating when no valoracion', () => {

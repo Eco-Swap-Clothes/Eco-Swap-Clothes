@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLeaf, FaRecycle, FaUsers, FaHandshake, FaArrowRight, FaStar } from 'react-icons/fa';
-import './HomePage.css';
 
 const HomePage = () => {
     return (

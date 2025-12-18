@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { FaLeaf, FaUser, FaSignOutAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
-import './Header.css';
 
 const Header = () => {
     const { isAuthenticated, logout } = useContext(AuthContext);

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLeaf, FaGithub, FaHeart, FaRecycle } from 'react-icons/fa';
-import './Footer.css';
 
 const Footer = () => {
     return (

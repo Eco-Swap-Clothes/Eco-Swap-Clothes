@@ -1,43 +1,36 @@
 
-import axios from 'axios';
-import AuthService from './AuthService'; 
-
-const API_URL = 'http://localhost:8080/api/items'; 
+import apiClient from '../config/api';
 
 class ItemService {
- 
-    getAuthHeaders() {
-        const token = AuthService.getCurrentToken();
-        if (token) {
-           
-            return { Authorization: `Bearer ${token}` };
-        }
-        return {}; 
+
+    /**
+     * Obtener todos los items publicados
+     */
+    async getAllItems() {
+        const response = await apiClient.get('/api/items');
+        // Backend returns paginated data, extract the content array
+        return response.data.content || response.data;
     }
 
     /**
-     * @param {FormData} formData 
+     * Crear un nuevo item
+     * @param {FormData} formData
      */
     async createItem(formData) {
-        const headers = this.getAuthHeaders();
-        
-        if (!headers.Authorization) {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
             throw new Error("No autenticado. Por favor, inicia sesión.");
         }
-        
-        const response = await axios.post(
-            API_URL, 
-            formData, 
-            { 
-                headers: {
-                    ...headers,
-                } 
-            } 
-        );
+
+        const response = await apiClient.post('/api/items', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
         return response.data;
     }
-    
-   
+
 }
 
 export default new ItemService();

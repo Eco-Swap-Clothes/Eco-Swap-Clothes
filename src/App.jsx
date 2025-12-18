@@ -4,16 +4,16 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext.jsx'; 
 
-import Header from './components/Header.jsx';
-import Footer from './components/Footer.jsx';
+import Header from './components/Header/Header.jsx';
+import Footer from './components/Footer/Footer.jsx';
 
 
-import HomePage from './pages/HomePage.jsx';
-import ExplorePage from './pages/ExplorePage.jsx';
-import RegisterPage from './pages/RegisterPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
-import PublishPage from './pages/PublishPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
+import HomePage from './pages/HomePage/HomePage.jsx';
+import ExplorePage from './pages/ExplorePage/ExplorePage.jsx';
+import RegisterPage from './pages/RegisterPage/RegisterPage.jsx';
+import LoginPage from './pages/LoginPage/LoginPage.jsx';
+import PublishPage from './pages/PublishPage/PublishPage.jsx';
+import ProfilePage from './pages/ProfilePage/ProfilePage.jsx';
 
 
 const PrivateRoute = ({ children }) => {
@@ -26,9 +26,9 @@ const PrivateRoute = ({ children }) => {
 function App() {
     return (
       
-        <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="App min-h-screen flex flex-col">
             <Header />
-            <main style={{ flexGrow: 1, padding: '20px' }}>
+            <main className="flex-grow">
                 <Routes>
                
                     <Route path="/" element={<HomePage />} />

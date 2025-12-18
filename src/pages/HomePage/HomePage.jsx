@@ -5,7 +5,7 @@ import Logo from '../../assets/Logo.png';
 
 const HomePage = () => {
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screena">
   
             <section className="bg-eco-secondary py-16 px-4">
                 <div className="container mx-auto max-w-4xl">

@@ -14,28 +14,27 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg">
+        <header className="bg-eco-primary text-white shadow-lg">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                     {/* Logo and Brand */}
                     <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-                        <FaLeaf className="text-3xl" />
                         <div>
                             <h1 className="text-2xl font-bold">EcoSwap</h1>
-                            <p className="text-xs text-green-100">Intercambia Ropa Sostenible</p>
+                            <p className="text-xs text-gray-200"></p>
                         </div>
                     </Link>
 
                     {/* Navigation */}
                     <nav className="hidden md:flex items-center gap-6">
-                        <Link to="/" className="hover:text-green-200 transition-colors font-medium">
+                        <Link to="/" className="hover:opacity-80 transition-opacity font-medium">
                             Inicio
                         </Link>
-                        <Link to="/explore" className="hover:text-green-200 transition-colors font-medium">
+                        <Link to="/explore" className="hover:opacity-80 transition-opacity font-medium">
                             Explorar
                         </Link>
                         {isAuthenticated && (
-                            <Link to="/publish" className="hover:text-green-200 transition-colors font-medium">
+                            <Link to="/publish" className="hover:opacity-80 transition-opacity font-medium">
                                 Publicar
                             </Link>
                         )}
@@ -82,15 +81,15 @@ const Header = () => {
                 </div>
 
                 {/* Mobile Navigation */}
-                <nav className="md:hidden flex justify-center gap-4 mt-4 pt-4 border-t border-green-500">
-                    <Link to="/" className="hover:text-green-200 transition-colors text-sm font-medium">
+                <nav className="md:hidden flex justify-center gap-4 mt-4 pt-4 border-t border-gray-400">
+                    <Link to="/" className="hover:opacity-80 transition-opacity text-sm font-medium">
                         Inicio
                     </Link>
-                    <Link to="/explore" className="hover:text-green-200 transition-colors text-sm font-medium">
+                    <Link to="/explore" className="hover:opacity-80 transition-opacity text-sm font-medium">
                         Explorar
                     </Link>
                     {isAuthenticated && (
-                        <Link to="/publish" className="hover:text-green-200 transition-colors text-sm font-medium">
+                        <Link to="/publish" className="hover:opacity-80 transition-opacity text-sm font-medium">
                             Publicar
                         </Link>
                     )}

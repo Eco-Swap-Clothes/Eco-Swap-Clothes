@@ -31,6 +31,41 @@ class ItemService {
         return response.data;
     }
 
+    /**
+     * Actualizar un item existente
+     * @param {number} itemId
+     * @param {FormData} formData
+     */
+    async updateItem(itemId, formData) {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            throw new Error("No autenticado. Por favor, inicia sesión.");
+        }
+
+        const response = await apiClient.put(`/api/items/${itemId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+        return response.data;
+    }
+
+    /**
+     * Eliminar un item
+     * @param {number} itemId
+     */
+    async deleteItem(itemId) {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            throw new Error("No autenticado. Por favor, inicia sesión.");
+        }
+
+        const response = await apiClient.delete(`/api/items/${itemId}`);
+        return response.data;
+    }
+
 }
 
 export default new ItemService();

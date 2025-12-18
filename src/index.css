@@ -1,6 +1,17 @@
 @import 'tailwindcss';
-@theme { --animate-spin: spin 1s linear infinite; }
+
+@theme {
+  --animate-spin: spin 1s linear infinite;
+  --color-eco-primary: #396848;
+  --color-eco-secondary: #BCD9A4;
+}
+
 @utility spin { animation: var(--animate-spin); }
+
+body {
+  background-color: #BCD9A4;
+  min-height: 100vh;
+}
 
 @keyframes spin {
   from {

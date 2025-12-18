@@ -1,12 +1,13 @@
 import React from 'react';
 import { FaStar, FaTshirt, FaMapMarkerAlt, FaTag } from 'react-icons/fa';
+import { API_BASE_URL } from '../../config/api';
 import './ItemCard.css';
 
-const BASE_UPLOADS_URL = 'http://localhost:8080/uploads/';
+const BASE_UPLOADS_URL = `${API_BASE_URL}/uploads/`;
 
 const ItemCard = ({ item }) => {
-    const imageUrl = item.imagenPrenda
-        ? `${BASE_UPLOADS_URL}${item.imagenPrenda}`
+    const imageUrl = item.imagenPrincipal
+        ? `${BASE_UPLOADS_URL}${item.imagenPrincipal}`
         : '/placeholder-clothing.jpg';
 
     const estadoColors = {

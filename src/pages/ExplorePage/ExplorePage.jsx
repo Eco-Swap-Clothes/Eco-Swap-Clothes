@@ -11,8 +11,9 @@ const ExplorePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('Todas');
     const [selectedSize, setSelectedSize] = useState('Todas');
+    const [filterDate, setFilterDate] = useState('');
 
-    const categories = ['Todas', 'Camiseta', 'Pantalón', 'Vestido', 'Chaqueta', 'Zapatos', 'Accesorios'];
+    const categories = ['Todas', 'Camisas', 'Pantalones', 'Vestidos', 'Chaquetas', 'Zapatos', 'Accesorios'];
     const sizes = ['Todas', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
     useEffect(() => {
@@ -38,7 +39,21 @@ const ExplorePage = () => {
                             item.descripcion?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === 'Todas' || item.categoria === selectedCategory;
         const matchesSize = selectedSize === 'Todas' || item.talla === selectedSize;
-        return matchesSearch && matchesCategory && matchesSize;
+
+        // Filter by date if selected
+        let matchesDate = true;
+        if (filterDate) {
+            const itemDate = new Date(item.fechaCreacion);
+            const selectedDate = new Date(filterDate);
+            matchesDate = itemDate.toDateString() === selectedDate.toDateString();
+        }
+
+        return matchesSearch && matchesCategory && matchesSize && matchesDate;
+    }).sort((a, b) => {
+        // Sort by most recent first
+        const dateA = new Date(a.fechaCreacion);
+        const dateB = new Date(b.fechaCreacion);
+        return dateB - dateA;
     });
 
     if (loading) {
@@ -99,7 +114,7 @@ const ExplorePage = () => {
                     <FaFilter className="text-gray-600" />
                     <span className="font-semibold text-gray-700">Filtros:</span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Category Filter */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -130,6 +145,19 @@ const ExplorePage = () => {
                                 <option key={size} value={size}>{size}</option>
                             ))}
                         </select>
+                    </div>
+
+                    {/* Filter by Date */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Filtrar por Fecha
+                        </label>
+                        <input
+                            type="date"
+                            value={filterDate}
+                            onChange={(e) => setFilterDate(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        />
                     </div>
                 </div>
             </div>

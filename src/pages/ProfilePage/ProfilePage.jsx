@@ -1,48 +1,133 @@
 import React, { useState, useEffect, useContext } from 'react';
-import ItemCard from '../../components/ItemCard/ItemCard';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext.jsx';
+import { API_BASE_URL } from '../../config/api';
 import UserService from '../../services/UserService';
+import ItemService from '../../services/ItemService';
 import './ProfilePage.css';
 
-const BASE_UPLOADS_URL = 'http://localhost:8080/uploads/';
+const BASE_UPLOADS_URL = `${API_BASE_URL}/uploads/`;
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [publishedItems, setPublishedItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [editingItem, setEditingItem] = useState(null);
+    const [editForm, setEditForm] = useState({
+        titulo: '',
+        descripcion: '',
+        categoria: '',
+        talla: '',
+        estadoPrenda: '',
+        ubicacion: ''
+    });
 
     const { token } = useContext(AuthContext);
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (!token) {
-                setError("No autenticado. Por favor, inicia sesión.");
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const userData = await UserService.getCurrentUser();
-                setUser(userData);
-
-                const itemsData = await UserService.getMyPublishedItems();
-                setPublishedItems(itemsData);
-
-                setLoading(false);
-            } catch (err) {
-                console.error("Error al cargar el perfil:", err.message);
-
-                if (err.message && err.message.includes("No autenticado")) {
-                    setError("Sesión expirada o inválida. Intenta iniciar sesión de nuevo.");
-                } else {
-                    setError("Error al cargar el perfil o las prendas. Revisa el backend.");
-                }
-                setLoading(false);
-            }
-        };
         fetchData();
     }, [token]);
+
+    const fetchData = async () => {
+        if (!token) {
+            setError("No autenticado. Por favor, inicia sesión.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const userData = await UserService.getCurrentUser();
+            setUser(userData);
+
+            const itemsData = await UserService.getMyPublishedItems();
+            setPublishedItems(itemsData);
+
+            setLoading(false);
+        } catch (err) {
+            console.error("Error al cargar el perfil:", err.message);
+
+            if (err.message && err.message.includes("No autenticado")) {
+                setError("Sesión expirada o inválida. Intenta iniciar sesión de nuevo.");
+            } else {
+                setError("Error al cargar el perfil o las prendas. Revisa el backend.");
+            }
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteItem = async (itemId) => {
+        if (!window.confirm('¿Estás seguro de que deseas eliminar esta prenda?')) {
+            return;
+        }
+
+        try {
+            await ItemService.deleteItem(itemId);
+            setPublishedItems(publishedItems.filter(item => item.id !== itemId));
+            alert('Prenda eliminada exitosamente');
+        } catch (err) {
+            console.error("Error al eliminar prenda:", err);
+            alert('Error al eliminar la prenda: ' + err.message);
+        }
+    };
+
+    const handleEditClick = (item) => {
+        setEditingItem(item);
+        setEditForm({
+            titulo: item.titulo || '',
+            descripcion: item.descripcion || '',
+            categoria: item.categoria || '',
+            talla: item.talla || '',
+            estadoPrenda: item.estadoPrenda || '',
+            ubicacion: item.ubicacion || ''
+        });
+    };
+
+    const handleEditFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditForm(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const formData = new FormData();
+            formData.append('titulo', editForm.titulo);
+            formData.append('descripcion', editForm.descripcion);
+            formData.append('categoria', editForm.categoria);
+            if (editForm.talla) formData.append('talla', editForm.talla);
+            if (editForm.estadoPrenda) formData.append('estadoPrenda', editForm.estadoPrenda);
+            if (editForm.ubicacion) formData.append('ubicacion', editForm.ubicacion);
+
+            await ItemService.updateItem(editingItem.id, formData);
+
+            // Refresh the items list
+            await fetchData();
+
+            // Close modal
+            setEditingItem(null);
+            alert('Prenda actualizada exitosamente');
+        } catch (err) {
+            console.error("Error al actualizar prenda:", err);
+            alert('Error al actualizar la prenda: ' + err.message);
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingItem(null);
+        setEditForm({
+            titulo: '',
+            descripcion: '',
+            categoria: '',
+            talla: '',
+            estadoPrenda: '',
+            ubicacion: ''
+        });
+    };
 
     if (loading) {
         return (
@@ -155,7 +240,44 @@ const ProfilePage = () => {
                 {publishedItems.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {publishedItems.map(item => (
-                            <ItemCard key={item.id} item={item} />
+                            <div key={item.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+                                {/* Image */}
+                                <div className="relative h-48 overflow-hidden bg-gray-100">
+                                    <img
+                                        src={item.imagenPrincipal ? `${BASE_UPLOADS_URL}${item.imagenPrincipal}` : '/placeholder-clothing.jpg'}
+                                        alt={item.titulo}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+                                {/* Content */}
+                                <div className="p-4">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-2 truncate">
+                                        {item.titulo}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                        {item.descripcion || 'Sin descripción'}
+                                    </p>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-2 mt-4">
+                                        <button
+                                            onClick={() => handleEditClick(item)}
+                                            className="flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                                        >
+                                            <FaEdit />
+                                            Editar
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteItem(item.id)}
+                                            className="flex-1 bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                                        >
+                                            <FaTrash />
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 ) : (
@@ -168,6 +290,143 @@ const ProfilePage = () => {
                     </div>
                 )}
             </div>
+
+            {/* Edit Modal */}
+            {editingItem && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-6">Editar Prenda</h2>
+
+                            <form onSubmit={handleEditSubmit} className="space-y-4">
+                                {/* Título */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Título *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="titulo"
+                                        value={editForm.titulo}
+                                        onChange={handleEditFormChange}
+                                        required
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    />
+                                </div>
+
+                                {/* Descripción */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Descripción *
+                                    </label>
+                                    <textarea
+                                        name="descripcion"
+                                        value={editForm.descripcion}
+                                        onChange={handleEditFormChange}
+                                        required
+                                        rows="4"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    />
+                                </div>
+
+                                {/* Categoría */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Categoría *
+                                    </label>
+                                    <select
+                                        name="categoria"
+                                        value={editForm.categoria}
+                                        onChange={handleEditFormChange}
+                                        required
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    >
+                                        <option value="">Selecciona una categoría</option>
+                                        <option value="Camisas">Camisas</option>
+                                        <option value="Pantalones">Pantalones</option>
+                                        <option value="Vestidos">Vestidos</option>
+                                        <option value="Chaquetas">Chaquetas</option>
+                                        <option value="Zapatos">Zapatos</option>
+                                        <option value="Accesorios">Accesorios</option>
+                                    </select>
+                                </div>
+
+                                {/* Talla */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Talla
+                                    </label>
+                                    <select
+                                        name="talla"
+                                        value={editForm.talla}
+                                        onChange={handleEditFormChange}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    >
+                                        <option value="">Selecciona una talla</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                    </select>
+                                </div>
+
+                                {/* Estado de la Prenda */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Estado de la Prenda
+                                    </label>
+                                    <select
+                                        name="estadoPrenda"
+                                        value={editForm.estadoPrenda}
+                                        onChange={handleEditFormChange}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    >
+                                        <option value="">Selecciona el estado</option>
+                                        <option value="Nuevo">Nuevo</option>
+                                        <option value="Como nuevo">Como nuevo</option>
+                                        <option value="Buen estado">Buen estado</option>
+                                        <option value="Usado">Usado</option>
+                                    </select>
+                                </div>
+
+                                {/* Ubicación */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Ubicación
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="ubicacion"
+                                        value={editForm.ubicacion}
+                                        onChange={handleEditFormChange}
+                                        placeholder="Ciudad, País"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    />
+                                </div>
+
+                                {/* Buttons */}
+                                <div className="flex gap-3 pt-4">
+                                    <button
+                                        type="submit"
+                                        className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                                    >
+                                        Guardar Cambios
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleCancelEdit}
+                                        className="flex-1 bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
